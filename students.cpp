@@ -21,14 +21,14 @@ students to_student(ifstream& fin) {
 	students student;
 	getline(fin, tmp);
 	pos = tmp.find(",", i);
-	strcpy_s(student.name, tmp.substr(i, pos - i).c_str());
-	i = pos + 2;
+	strncpy_s(student.name, tmp.substr(i, pos - i).c_str(), _TRUNCATE);
+	i = pos + 1;
 	pos = tmp.find(",", i);
 	student.studentID = stoi(tmp.substr(i, pos - i));
-	i = pos + 2;
+	i = pos + 1;
 	pos = tmp.find(",", i);
 	student.score = stof(tmp.substr(i, pos - i));
-	i = pos + 2;
+	i = pos + 1;
 	student.advisorID = stoi(tmp.substr(i));
 
 	return student;
@@ -39,7 +39,7 @@ int main() {
 	string tmp;
 
 	ifstream fin;
-	fin.open("Students.txt");
+	fin.open("sampleData.csv");
 	ofstream fout;
 	fout.open("Student.DB");
 
