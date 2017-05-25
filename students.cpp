@@ -12,7 +12,7 @@ typedef struct {
 } students;
 
 void insert_DB(ofstream& fout, students student) {
-	fout << student.name << ", " << student.studentID << ", " << student.score << ", " << student.advisorID << endl;
+	fout << student.name << "," << student.studentID << "," << student.score << "," << student.advisorID << endl;
 }
 
 students to_student(ifstream& fin) {
