@@ -11,52 +11,68 @@ private:
     BPNode** childnode;
     BPNode* parentnode;
     float* scores;
+    int* BNum;
     bool leaf;
     int in;
     int n;
 public:
-    BPNode(int i){
+    BPNode(){
         nextleaf = NULL;
         childnode = NULL;
         parentnode = NULL;
         scores = NULL;
+        BNum = NULL;
         leaf = true;
-        n = i;
+        n = (BLOCKSIZE-(sizeof(nextleaf)+sizeof(childnode)+sizeof(parentnode)+sizeof(leaf)+sizeof(in)+sizeof(n)))/(sizeof(scores)+sizeof(BNum));
         in =0;
     }
     void Sort(){
         float temp;
-        BPNode* tmp = new BPNode(this->n);
+        BPNode* childtem;
         int i;
         for (i =0; i<in-1; i++){
             if(this->scores[in-1] < this->scores[i]){
-                temp = this->scores[in-1];
-                for(int j=in;j>i+1;j--){
-                    scores[j-1] = scores[j-2];
-                }
-                scores[i] = temp;
                 break;
             }
         }
+        temp = this->scores[in-1];
+        for(int j=in;j>i+1;j--){
+            scores[j-1] = scores[j-2];
+        }
+        scores[i] = temp;
         if(!this->isLeaf()){
+            BPNode* tmp = new BPNode();
             tmp->leaf = false;
-
-
-
-
+            tmp->childnode[in] = new BPNode();
+            tmp->childnode[in]->leaf = tmp->childnode[0]->leaf;
+            childtem = tmp->childnode[in];
+            for(int j = in; j > i; j--){
+               tmp->childnode[j]= tmp->childnode[j-1];
+            }
+            tmp->childnode[i] = childtem;
         }
         else{
-
+            int tempBNum = this->BNum[in-1];
+            for(int j = in; j>i+1;j--)
+                BNum[j-1] = BNum[j-2];
+            BNum[i] = tempBNum;
         }
+    }
+    BPNode* Copy(){
+        BPNode* b;
+        b->parentnode = this->parentnode;
+        b->leaf = this->leaf;
+        b->n = this->n;
+        return b;
     }
     bool isOver(){
         return (n < in);
     }
     void Split(){
-        BPNode* new1 = new BPNode(this->n);
         BPNode* tmp;
         if(this->parentnode == NULL){ //When this node is a root.
-            BPNode* new2 = new BPNode(this->n);
+            BPNode* new1 = new BPNode();
+            BPNode* new2 = new BPNode();
             for(int k = this->in/2+1; k<in; k++){
                 new2->scores[k] = this->scores[k];
                 new2->in++;
@@ -77,12 +93,19 @@ public:
             new2->parentnode=this;
         }
         else{ //When this node is not a root.
+            BPNode* new1 = this->Copy();
             for(int k = this->in/2+1; k<this->in; k++){
                 new1->scores[k] = this->scores[k];
                 new1->in++;
                 this->scores[k] =0;
             }
-            new1->leaf = this->leaf;
+            this->in = in/2;
+            if(new1->isLeaf()){
+                new1->nextleaf = this->nextleaf;
+                this->nextleaf = new1;
+            }
+            //insert parent에 scores[in/2]
+            //childnode 정리
 
         }
 

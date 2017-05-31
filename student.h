@@ -1,6 +1,6 @@
 #ifndef STUDENT_H_INCLUDED
 #define STUDENT_H_INCLUDED
-
+#define BLOCKSIZE 4096
 class Student{
 friend class BPNode;
 private:
@@ -9,6 +9,7 @@ public:
 	unsigned studentID;
 	float score;
 	unsigned advisorID;
+	int Blocknum;
     Student(char name[20], unsigned studentID, float score, unsigned advisorID){
         strcpy(this->name, name);
         this->studentID = studentID;
