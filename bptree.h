@@ -77,7 +77,7 @@ public:
             new2->parentnode=this;
         }
         else{ //When this node is not a root.
-            for(int k = this->in/2+1; k<in; k++){
+            for(int k = this->in/2+1; k<this->in; k++){
                 new1->scores[k] = this->scores[k];
                 new1->in++;
                 this->scores[k] =0;
@@ -127,7 +127,7 @@ public:
                 }
                 tmp = tmp->childnode[i];
             }
-            tmp->score[tmp->in] = s.getscore();
+            tmp->scores[tmp->in] = s.getscore();
             tmp->Sort();
         }
         if (tmp->isOver()){
