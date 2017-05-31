@@ -9,6 +9,7 @@ friend class BPTree;
 private:
     BPNode* nextleaf;
     BPNode** childnode;
+    BPNode* parentnode;
     float* scores;
     bool leaf;
     int in;
@@ -25,23 +26,36 @@ public:
     }
     void Sort(){
         float temp;
-        for (int i =0; i<in; i++){
-            for (int j =0; j < in; j++){
-                if (scores[i] > scores[j]){
-                    temp = scores[i];
-                    scores[i] = scores[j];
-                    scores[j] = temp;
+        BPNode* tmp = new BPNode(this->n);
+        int i;
+        for (i =0; i<in-1; i++){
+            if(this->scores[in-1] < this->scores[i]){
+                temp = this->scores[in-1];
+                for(int j=in;j>i+1;j--){
+                    scores[j-1] = scores[j-2];
                 }
+                scores[i] = temp;
+                break;
             }
+        }
+        if(!this->isLeaf()){
+            tmp->leaf = false;
+
+
+
+
+        }
+        else{
+
         }
     }
     bool isOver(){
         return (n < in);
     }
-    void Split(int i){
+    void Split(){
         BPNode* new1 = new BPNode(this->n);
         BPNode* tmp;
-        if( i == 0){ //When this node is a root.
+        if(this->parentnode == NULL){ //When this node is a root.
             BPNode* new2 = new BPNode(this->n);
             for(int k = this->in/2+1; k<in; k++){
                 new2->scores[k] = this->scores[k];
@@ -68,7 +82,7 @@ public:
                 new1->in++;
                 this->scores[k] =0;
             }
-            new1->leafnode = this->leafnode;
+            new1->leaf = this->leaf;
 
         }
 
@@ -89,30 +103,80 @@ public:
         n = i;
         this->root = NULL;}
     void Insert(Student s){
+        int i =0;
         BPNode* tmp;
         tmp = this->root;
         if(tmp->isEmpty()){
             tmp->scores[0] = s.getscore();
         }
         else{
+            while(!tmp->isLeaf()){
+                for(i = 0; i< tmp->in; i++){
+                    if(s.getscore()< tmp->scores[0]){
+                        break;
+                    }
+                    else if(s.getscore() > tmp->scores[i] && s.getscore() < tmp->scores[i+1]){
+                        i++;
+                        break;
+                    }
+                    else if(s.getscore() == tmp->scores[i]){
+                        break;
+                    }
+                    else
+                        continue;
+                }
+                tmp = tmp->childnode[i];
+            }
+            tmp->score[tmp->in] = s.getscore();
+            tmp->Sort();
+        }
+        if (tmp->isOver()){
+            tmp->Split();
+        }
+      /*
+        else{
             if(tmp->isLeaf()){
                 tmp->scores[tmp->in]=s.getscore();
-                if (tmp->isOver()){
-                    tmp->Split(0);
-                }
+                tmp->Sort();
             }
             else{
-                while()
-                tmp = this->root->childnode[0];
+                while(!tmp->isLeaf()){
+                    for(i = 0; i< tmp->in; i++){
+                        if(s.getscore()< tmp->scores[0]){
+                            break;
+                        }
+                        else if(s.getscore() > tmp->scores[i] && s.getscore() < tmp->scores[i+1]){
+                            i++;
+                            break;
+                        }
+                        else if(s.getscore() == tmp->scores[i]){
+                            break;
+                        }
+                        else
+                            continue;
+                    }
+                    tmp = tmp->childnode[i];
+                }
+                tmp->score[tmp->in] = s.getscore();
+                tmp->Sort();
 
-            }
-
-        }
-
+            }}*/
 
         tmp->in++;
     }
-    void LeafPrint(&ofstream of){
+    void LeafPrint(ofstream& of){
+        BPNode* tmp;
+        tmp = this->root;
+        while(!tmp->isLeaf()){
+            tmp = tmp->childnode[0];
+        }
+        while(tmp!= NULL){
+            for(int i = 0; i<tmp->in; i++){
+                of << tmp->scores[i] <<" ";
+            }
+            tmp = tmp->nextleaf;
+            of << endl;
+        }
     }
     void Print(int k){
         BPNode* a;
