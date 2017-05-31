@@ -12,6 +12,7 @@ void insert_DB(ofstream& fout, Student student) {
 }
 
 int main() {
+
 	int N;
 	int k;
 	string tmp;
@@ -22,9 +23,20 @@ int main() {
 	fout1.open("Student.DB");
 	fout2.open("Students_score.idx");
 
-	getline(fin, tmp);
+	getline(fin, tmp); //몇 개의 데이터 인지 입력받음
 //	N = stoi(tmp);
-
+//  Student* students;
+//  for (int i = 0; i<N; i++){
+//  insert_DB(); // treanfer the excel data 'fin' into Students class
+//  Hashfunction(students[i]); // choose BLOCK where this student data stored
+//  }
+//  fout1 <<Hash result
+//  BPNode* root;
+//  for(int i =0;i<N; i++){
+//  root.insert(student[i]);
+//  }
+//  fout2 << BPTree;
+//  cout << K-th leaf node;
 	for (int j = 0; j < 10; j++)
 		insert_DB(fout1, to_student(fin));
     cin >> k;
