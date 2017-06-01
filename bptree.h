@@ -1,17 +1,15 @@
 #ifndef BPTREE_H_INCLUDED
 #define BPTREE_H_INCLUDED
 using namespace std;
-#include "students.h"
+#include "student.h"
 
 
 class BPNode{
-friend class BPTree;
 private:
     BPNode* nextleaf;
     BPNode** childnode;
     BPNode* parentnode;
-    float* scores;
-    int* BNum;
+    Student* students;
     bool leaf;
     int in;
     int n;
@@ -20,26 +18,25 @@ public:
         nextleaf = NULL;
         childnode = NULL;
         parentnode = NULL;
-        scores = NULL;
-        BNum = NULL;
+        students = NULL;
         leaf = true;
-        n = (BLOCKSIZE-(sizeof(nextleaf)+sizeof(childnode)+sizeof(parentnode)+sizeof(leaf)+sizeof(in)+sizeof(n)))/(sizeof(scores)+sizeof(BNum));
+        n = (BLOCKSIZE-(sizeof(nextleaf)+sizeof(childnode)+sizeof(parentnode)+sizeof(leaf)+sizeof(in)+sizeof(n)))/(sizeof(students));
         in =0;
     }
     void Sort(){
-        float temp;
+        Student* temp;
         BPNode* childtem;
         int i;
         for (i =0; i<in-1; i++){
-            if(this->scores[in-1] < this->scores[i]){
+            if(this->students[in-1].score < this->students[i].score){
                 break;
             }
         }
-        temp = this->scores[in-1];
+        temp = this->students[in-1];
         for(int j=in;j>i+1;j--){
-            scores[j-1] = scores[j-2];
+            students[j-1] = students[j-2];
         }
-        scores[i] = temp;
+        students[i] = temp;
         if(!this->isLeaf()){
             BPNode* tmp = new BPNode();
             tmp->leaf = false;
@@ -51,12 +48,13 @@ public:
             }
             tmp->childnode[i] = childtem;
         }
-        else{
+      /*  else{
             int tempBNum = this->BNum[in-1];
             for(int j = in; j>i+1;j--)
                 BNum[j-1] = BNum[j-2];
             BNum[i] = tempBNum;
         }
+        */
     }
     BPNode* Copy(){
         BPNode* b;
@@ -74,17 +72,17 @@ public:
             BPNode* new1 = new BPNode();
             BPNode* new2 = new BPNode();
             for(int k = this->in/2+1; k<in; k++){
-                new2->scores[k] = this->scores[k];
+                new2->students[k] = this->students[k];
                 new2->in++;
-                this->scores[k] = 0;
+                this->students[k] = 0;
             }
             for(int j = 0; j< in/2+1 ; j++){
-                new1->scores[j] = this->scores[j];
+                new1->students[j] = this->students[j];
                 new1->in++;
-                this->scores[j] = 0;
+                this->students[j] = 0;
             }
             new1->nextleaf = new2;
-            this->scores[0] = new1->scores[new1->in-1];
+            this->students[0] = new1->students[new1->in-1];
             this->childnode[0] = new1;
             this->childnode[1] = new2;
             this->leaf = false;
@@ -95,17 +93,17 @@ public:
         else{ //When this node is not a root.
             BPNode* new1 = this->Copy();
             for(int k = this->in/2+1; k<this->in; k++){
-                new1->scores[k] = this->scores[k];
+                new1->students[k] = this->students[k];
                 new1->in++;
-                this->scores[k] =0;
+                this->students[k] =0;
             }
             this->in = in/2;
             if(new1->isLeaf()){
                 new1->nextleaf = this->nextleaf;
                 this->nextleaf = new1;
             }
-            //insert parentì— scores[in/2]
-            //childnode ì •ë¦¬
+            //insert parent¿¡ scores[in/2]
+            //childnode Á¤¸®
 
         }
 
@@ -115,34 +113,24 @@ public:
         return (in == 0);}
     bool isLeaf(){
         return leaf;}
-};
-
-class BPTree{
-private:
-    BPNode* root;
-	// int n;
-public:
-    BPTree(/*int i*/){
-		// n = i;
-        this->root = NULL;}
-    void Insert(Students s){
+    void Insert(Student s){
         int i =0;
         BPNode* tmp;
-        tmp = this->root;
+        tmp = this;
         if(tmp->isEmpty()){
-            tmp->scores[0] = s.score;
+            tmp->students[0] = s;
         }
         else{
             while(!tmp->isLeaf()){
                 for(i = 0; i< tmp->in; i++){
-                    if(s.score < tmp->scores[0]){
+                    if(s.getscore()< tmp->scores[0]){
                         break;
                     }
-                    else if(s.score > tmp->scores[i] && s.score < tmp->scores[i+1]){
+                    else if(s.getscore() > tmp->scores[i] && s.getscore() < tmp->scores[i+1]){
                         i++;
                         break;
                     }
-                    else if(s.score == tmp->scores[i]){
+                    else if(s.getscore() == tmp->scores[i]){
                         break;
                     }
                     else
@@ -150,7 +138,7 @@ public:
                 }
                 tmp = tmp->childnode[i];
             }
-            tmp->scores[tmp->in] = s.score;
+            tmp->students[tmp->in] = s;
             tmp->Sort();
         }
         if (tmp->isOver()){
@@ -189,7 +177,7 @@ public:
     }
     void LeafPrint(ofstream& of){
         BPNode* tmp;
-        tmp = this->root;
+        tmp = this;
         while(!tmp->isLeaf()){
             tmp = tmp->childnode[0];
         }
@@ -202,8 +190,7 @@ public:
         }
     }
     void Print(int k){
-        BPNode* a;
-        a = root;
+        BPNode* a = this;
         while(!a->isLeaf()){
             a = a->childnode[0];
         }
@@ -221,7 +208,6 @@ public:
         cout<<endl;
     }
 };
-
 
 
 
