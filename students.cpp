@@ -59,7 +59,7 @@ int main() {
 	for (int i = 0; i < N; i++) {
 		student_tmp = to_student(fin);
 		testDB.Insert(student_tmp);
-		tree.Insert(student_tmp);
+		// tree.Insert(student_tmp);
 	}
 
 	testDB.Print();
@@ -89,8 +89,8 @@ int main() {
 //  fout2 << BPTree;
 //  cout << K-th leaf node;
 
-    cin >> k;
-	tree.Print(k);
+    // cin >> k;
+	// tree.Print(k);
   
 	fout.close();
 
