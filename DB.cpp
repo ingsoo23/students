@@ -36,7 +36,7 @@ void _DB::Close()
 	DBFile.close();
 }
 
-bool _DB::Insert(Students& student)
+bool _DB::Insert(Students student)
 {
 	bool Is_Insert = false;
 	///// Dynamic Hash를 사용하여 Database에 저장한다.
@@ -90,8 +90,17 @@ void _DB::ID_Search(unsigned int ID)
 		if (DB_Buffer.Record[i].studentID == ID)          // Case : ID에 해당하는 Record가 존재하는 경우.		
 		{
 			cout << "Key : " << DB_File_Offset << ", Name : " << DB_Buffer.Record[i].name << ", StudentID : " << DB_Buffer.Record[i].studentID << ", Score : " << DB_Buffer.Record[i].score << ", AdvisorID : " << DB_Buffer.Record[i].advisorID << endl;
+			cout << "Record count : " << DB_Buffer.Record_Count << endl;
 			return;
 		}
 
 	cout << "No Record Look Up." << endl;
+}
+
+int _DB::BlockNum(unsigned int ID)
+{
+	for (int i = 0; i < BLOCKSIZE / sizeof(long); i++) {
+		if (H->Hash_Table.Table_Block_Offset[i] == H->Get_Hash_Offset(to_string(ID)))
+			return i;
+	}
 }

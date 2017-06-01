@@ -16,9 +16,10 @@ public:
 	Dynamic_Hash* H;
 	void Open();
 	void Close();
-	bool Insert(Students& student);
+	bool Insert(Students student);
 	void Print();
 	void ID_Search(unsigned int ID);
+	int BlockNum(unsigned int ID);
 };
 
 #endif
