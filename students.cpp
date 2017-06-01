@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <string.h>
 #include <string>
 #include <cstring>
+#include <stdlib.h>
+#include "bptree.h"
 #include "students.h"
 #include "dynamic_hash.h"
 #include "DB.h"
@@ -36,8 +39,10 @@ Students to_student(ifstream& fin) {
 }
 
 int main() {
+
 	int N;
 	unsigned int tmpID;
+	int k;
 	string tmp;
 	Students student_tmp;
 	_DB testDB;
@@ -64,6 +69,27 @@ int main() {
 
 	fin.close();
 	testDB.Close();
+
+	ofstream fout;
+	fout.open("Students_score.idx");
+
+//	N = stoi(tmp);
+//  Student* students;
+//  for (int i = 0; i<N; i++){
+//  insert_DB(); // treanfer the excel data 'fin' into Students class
+//  Hashfunction(students[i]); // choose BLOCK where this student data stored
+//  }
+//  fout1 <<Hash result
+//  BPNode* root;
+//  for(int i =0;i<N; i++){
+//  root.insert(student[i]);
+//  }
+//  fout2 << BPTree;
+//  cout << K-th leaf node;
+
+    cin >> k;
+  
+  fout.close();
 
 	return 0;
 }
