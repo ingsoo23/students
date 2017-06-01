@@ -46,6 +46,7 @@ int main() {
 	string tmp;
 	Students student_tmp;
 	_DB testDB;
+	BPTree tree;
 
 	ifstream fin;
 	fin.open("sampleData.csv");
@@ -58,6 +59,7 @@ int main() {
 	for (int i = 0; i < N; i++) {
 		student_tmp = to_student(fin);
 		testDB.Insert(student_tmp);
+		tree.Insert(student_tmp);
 	}
 
 	testDB.Print();
@@ -88,8 +90,9 @@ int main() {
 //  cout << K-th leaf node;
 
     cin >> k;
+	tree.Print(k);
   
-  fout.close();
+	fout.close();
 
 	return 0;
 }
