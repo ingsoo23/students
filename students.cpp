@@ -1,27 +1,28 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
+#include "students.h"
+#include "dynamic_hash.h"
+#include "DB.h"
+
+#pragma pack(1)
 
 using namespace std;
 
-typedef struct {
-	char name[20];
-	unsigned studentID;
-	float score;
-	unsigned advisorID;
-} students;
-
-void insert_DB(ofstream& fout, students student) {
-	fout << student.name << "," << student.studentID << "," << student.score << "," << student.advisorID << endl;
+Block::Block()
+{
+	Record_Count = 0;
+	Bit_Num = 0;
 }
 
-students to_student(ifstream& fin) {
+Students to_student(ifstream& fin) {
 	int i = 0, pos = 0;
 	string tmp;
-	students student;
+	Students student;
 	getline(fin, tmp);
 	pos = tmp.find(",", i);
-	strncpy_s(student.name, tmp.substr(i, pos - i).c_str(), _TRUNCATE);
+	strcpy(student.name, tmp.substr(i, pos - i).c_str());
 	i = pos + 1;
 	pos = tmp.find(",", i);
 	student.studentID = stoi(tmp.substr(i, pos - i));
@@ -36,21 +37,33 @@ students to_student(ifstream& fin) {
 
 int main() {
 	int N;
+	unsigned int tmpID;
 	string tmp;
+	Students student_tmp;
+	_DB testDB;
 
 	ifstream fin;
 	fin.open("sampleData.csv");
-	ofstream fout;
-	fout.open("Student.DB");
 
 	getline(fin, tmp);
 	N = stoi(tmp);
 
-	for (int j = 0; j < N; j++)
-		insert_DB(fout, to_student(fin));
+	testDB.Open();
+
+	for (int i = 0; i < N; i++) {
+		student_tmp = to_student(fin);
+		testDB.Insert(student_tmp);
+	}
+
+	testDB.Print();
+
+	cout << "ID search! Enter ID : ";
+	cin >> tmpID;
+
+	testDB.ID_Search(tmpID);
 
 	fin.close();
-	fout.close();
+	testDB.Close();
 
 	return 0;
 }
