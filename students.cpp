@@ -1,29 +1,80 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include <cstring>
 #include <string>
+#include <cstring>
 #include <stdlib.h>
 #include "bptree.h"
+#include "students.h"
+#include "dynamic_hash.h"
+#include "DB.h"
+
+#pragma pack(1)
+
 using namespace std;
 
-void insert_DB(ofstream& fout, Student student) {
-	student.toPrint(fout);
+Block::Block()
+{
+	Record_Count = 0;
+	Bit_Num = 0;
+}
+
+Students to_student(ifstream& fin) {
+	int i = 0, pos = 0;
+	string tmp;
+	Students student;
+	getline(fin, tmp);
+	pos = tmp.find(",", i);
+	strcpy(student.name, tmp.substr(i, pos - i).c_str());
+	i = pos + 1;
+	pos = tmp.find(",", i);
+	student.studentID = stoi(tmp.substr(i, pos - i));
+	i = pos + 1;
+	pos = tmp.find(",", i);
+	student.score = stof(tmp.substr(i, pos - i));
+	i = pos + 1;
+	student.advisorID = stoi(tmp.substr(i));
+
+	return student;
 }
 
 int main() {
 
 	int N;
+	unsigned int tmpID;
 	int k;
 	string tmp;
+	Students student_tmp;
+	_DB testDB;
+	BPTree tree;
 
 	ifstream fin;
 	fin.open("sampleData.csv");
-	ofstream fout1, fout2;
-	fout1.open("Student.DB");
-	fout2.open("Students_score.idx");
 
-	getline(fin, tmp); //몇 개의 데이터 인지 입력받음
+	getline(fin, tmp);
+	N = stoi(tmp);
+
+	testDB.Open();
+
+	for (int i = 0; i < N; i++) {
+		student_tmp = to_student(fin);
+		testDB.Insert(student_tmp);
+		// tree.Insert(student_tmp);
+	}
+
+	testDB.Print();
+
+	cout << "ID search! Enter ID : ";
+	cin >> tmpID;
+
+	testDB.ID_Search(tmpID);
+
+	fin.close();
+	testDB.Close();
+
+	ofstream fout;
+	fout.open("Students_score.idx");
+
 //	N = stoi(tmp);
 //  Student* students;
 //  for (int i = 0; i<N; i++){
@@ -37,12 +88,11 @@ int main() {
 //  }
 //  fout2 << BPTree;
 //  cout << K-th leaf node;
-	for (int j = 0; j < 10; j++)
-		insert_DB(fout1, to_student(fin));
-    cin >> k;
 
-	fin.close();
-	fout1.close();
-    fout2.close();
+    // cin >> k;
+	// tree.Print(k);
+  
+	fout.close();
+
 	return 0;
 }
