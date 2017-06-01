@@ -1,7 +1,7 @@
 #ifndef BPTREE_H_INCLUDED
 #define BPTREE_H_INCLUDED
 using namespace std;
-#include "student.h"
+#include "students.h"
 
 
 class BPNode{
@@ -120,29 +120,29 @@ public:
 class BPTree{
 private:
     BPNode* root;
-    int n;
+	// int n;
 public:
-    BPTree(int i){
-        n = i;
+    BPTree(/*int i*/){
+		// n = i;
         this->root = NULL;}
-    void Insert(Student s){
+    void Insert(Students s){
         int i =0;
         BPNode* tmp;
         tmp = this->root;
         if(tmp->isEmpty()){
-            tmp->scores[0] = s.getscore();
+            tmp->scores[0] = s.score;
         }
         else{
             while(!tmp->isLeaf()){
                 for(i = 0; i< tmp->in; i++){
-                    if(s.getscore()< tmp->scores[0]){
+                    if(s.score < tmp->scores[0]){
                         break;
                     }
-                    else if(s.getscore() > tmp->scores[i] && s.getscore() < tmp->scores[i+1]){
+                    else if(s.score > tmp->scores[i] && s.score < tmp->scores[i+1]){
                         i++;
                         break;
                     }
-                    else if(s.getscore() == tmp->scores[i]){
+                    else if(s.score == tmp->scores[i]){
                         break;
                     }
                     else
@@ -150,7 +150,7 @@ public:
                 }
                 tmp = tmp->childnode[i];
             }
-            tmp->scores[tmp->in] = s.getscore();
+            tmp->scores[tmp->in] = s.score;
             tmp->Sort();
         }
         if (tmp->isOver()){
