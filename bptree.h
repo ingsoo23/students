@@ -3,7 +3,6 @@
 using namespace std;
 #include "student.h"
 
-
 class BPNode {
 private:
 	BPNode* nextleaf;
@@ -102,12 +101,9 @@ public:
 				new1->nextleaf = this->nextleaf;
 				this->nextleaf = new1;
 			}
-			//insert parent¿¡ scores[in/2]
-			//childnode Á¤¸®
-
-		}
-
-
+			//insert parentÂ¿Â¡ scores[in/2]
+			//childnode ÃÂ¤Â¸Â®
+    }
 	}
 	bool isEmpty() {
 		return (in == 0);
@@ -209,8 +205,5 @@ public:
 		cout << endl;
 	}
 };
-
-
-
 
 #endif // BPTREE_H_INCLUDED
