@@ -54,20 +54,21 @@ int main() {
 	getline(fin, tmp);
 	N = stoi(tmp);
 
+	unsigned int IDtmp[N];
 	testDB.Open();
 
 	for (int i = 0; i < N; i++) {
 		student_tmp = to_student(fin);
 		testDB.Insert(student_tmp);
+		IDtmp[i] = student_tmp.studentID;
 		// tree.Insert(student_tmp);
 	}
 
 	testDB.Print();
 
-	cout << "ID search! Enter ID : ";
-	cin >> tmpID;
-
-	testDB.ID_Search(tmpID);
+	for (int i = 0; i < N; i++) {
+		cout << testDB.BlockNum(IDtmp[i]) << endl;
+	}
 
 	fin.close();
 	testDB.Close();
