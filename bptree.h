@@ -30,27 +30,30 @@ public:
     void Sort(){
         Students temp;
 		int BNtemp;
-        BPNode* childtem;
+		int a = this->in;
+        BPNode* childtem = new BPNode();
         int i, j;
-        for (i =0; i<in-1; i++){
-            if(this->students[in-1].score < this->students[i].score){
+		temp = Copy(this->students[s-1]);
+		BNtemp = BNum[in-1];
+        for (i =0; i<s-1; i++){
+            if(temp.score < this->students[i].score){
                 break;
             }
         }
-        for(j=in;j>i+1;j--){
+        for(j=s;j>i+1;j--){
             students[j-1] = Copy(students[j-2]);
 			BNum[j-1] = BNum[j-2];
         }
-        students[i] = temp;
+        students[i] = Copy(temp);
 		BNum[i] = BNtemp;
         if(!this->isLeaf()){
-            childtem = this->childnode[in];
+            childtem = this->childnode[s];
         //    tmp->leaf = false;
         //    tmp->childnode[in] = BPNode();
         //    tmp->childnode[in]->leaf = tmp->childnode[0]->leaf;
          //   childtem = tmp->childnode[in];
-            for(j = in; j > i; j--){
-				this->childnode[j]=this->childnode[j-1];
+            for(j = s; j > i+1; j--){
+				this->childnode[j] = this->childnode[j-1];
             }
             this->childnode[i] = childtem;
         }
@@ -87,30 +90,23 @@ public:
 				
 				new2->BNum[s] = this->BNum[k];
                 new2->in++;
-				this->BNum[k] = 0;
 				s++;
-                //this->students[k] = Copy(Students());
             }
             for(j = 0; j< IN_NODE_MAX/2+1 ; j++){
                 new1->students[j] = Copy(this->students[j]);
 				new1->BNum[j] = this->BNum[j];
                 new1->in++;
-				this->BNum[j] = 0;
-                //this->students[j] = 0;
             }
 			
             new1->nextleaf = new2;
-			cout << new1->in << endl;
-			cout << new1->nextleaf->in << endl;
             this->students[0] = Copy(new1->students[new1->in-1]);
+			this->BNum[0] = new1->BNum[0];
             this->childnode[0] = new1;
             this->childnode[1] = new2;
             this->leaf = false;
             this->in = 1;
             new1->parentnode = this;
             new2->parentnode = this;
-			cout << this->childnode[0]->students[0].score << endl;
-			
         }
         else{ //When this node is not a root.
 			s =0;
@@ -119,8 +115,8 @@ public:
 			int k;
 			//childtem = new BPNode();
 			//childtem = 
-            for(k = IN_NODE_MAX/2+1; k<IN_NODE_MAX; k++){
-                new1->students[s] = this->students[k];
+            for(k = IN_NODE_MAX/2+2; k<IN_NODE_MAX; k++){
+                new1->students[s] = Copy(this->students[k]);
 				new1->BNum[s] = this->BNum[k];
                 new1->in++;
 				s++;
@@ -136,9 +132,9 @@ public:
 			parenttmp->BNum[parenttmp->in] = new1->BNum[new1->in];
 			parenttmp->in++;
 			parenttmp->childnode[parenttmp->in] = new1;
+			parenttmp->Sort();
 			if(parenttmp->isOver())
 				parenttmp->Split();
-			parenttmp->Sort();
             //insert parent¿¡ scores[in/2]
             //childnode Á¤¸®
 
@@ -220,17 +216,20 @@ public:
 
     }
     void Print(ofstream& of){
+		int s = 0;
 		int i =0;
         BPNode* tmp = this;
         while(!tmp->isLeaf()){
             tmp = tmp->childnode[0];
         }
         while(tmp!= NULL){
+			of << "LEAF NODE No." << s+1 << endl;
             for(i = 0; i<tmp->in; i++){
 				of << tmp->students[i].score << ", " << tmp->students[i].studentID << "," << tmp->BNum[i] <<endl;
             }
             tmp = tmp->nextleaf;
 			of << "-----------------------------------------------------------------------" << endl;
+			s++;
         }
     }
     void Print(int k){
@@ -242,6 +241,7 @@ public:
         int i = k;
         while(i != 1){
             tmp = tmp->nextleaf;
+			/*
 			if(tmp == NULL){
                 cout << k <<" is too big"<< endl;
                 break;
@@ -250,15 +250,16 @@ public:
                 cout << k <<" is too small"<< endl;
                 break;
             }
+			*/
 			i--;
         }
 		if( i == 1 && tmp!= NULL){
-			for(j =0; j<tmp->in;j++){
+			for(j =0; j< tmp->in ;j++){
 				cout << tmp->students[i].score << ", " << tmp->students[i].studentID << "," << tmp->BNum[i] <<endl;
 			}
 		}
     }
-	Students Copy(Students &a){
+	Students Copy(Students& a){
 		Students b;
 		strcpy(b.name, a.name);
 		b.studentID = a.studentID;
