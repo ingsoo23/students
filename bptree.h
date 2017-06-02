@@ -73,7 +73,7 @@ public:
             BPNode* new1 = new BPNode();
             BPNode* new2 = new BPNode();
 			s =0;
-            for(k = IN_NODE_MAX/2+1; k<in; k++){
+            for(k = this->in/2+1; k<in; k++){
 				
                 new2->students[s] = Copy(this->students[k]);
 				
@@ -81,7 +81,7 @@ public:
                 new2->in++;
 				s++;
             }
-            for(j = 0; j< IN_NODE_MAX/2+1 ; j++){
+            for(j = 0; j< this->in/2+1 ; j++){
                 new1->students[j] = Copy(this->students[j]);
 				new1->BNum[j] = this->BNum[j];
                 new1->in++;
@@ -101,25 +101,21 @@ public:
             BPNode* new1 = new BPNode();
             BPNode* new2 = new BPNode();
 			s =0;
-            for(k = IN_NODE_MAX/2+1; k<in; k++){
+            for(k = this->in/2+1; k<this->in; k++){
 				
                 new2->students[s] = Copy(this->students[k]);
 				
+				new2->childnode[s] = this->childnode[k];
 				new2->BNum[s] = this->BNum[k];
                 new2->in++;
 				s++;
             }
-            for(j = 0; j< IN_NODE_MAX/2+1 ; j++){
+            for(j = 0; j< this->in/2+1 ; j++){
                 new1->students[j] = Copy(this->students[j]);
 				new1->BNum[j] = this->BNum[j];
+				new1->childnode[j] = this->childnode[j];
                 new1->in++;
             }
-            for(j = 0 ; j<IN_NODE_MAX/2 +1 ; j++){
-				new1->childnode[j] = this->childnode[j];
-			}
-			for(j=IN_NODE_MAX/2 +1; j < IN_NODE_MAX+1 ;j++){
-				new2->childnode[j] = this->childnode[j];
-			}
             this->students[0] = Copy(new1->students[new1->in-1]);
 			this->BNum[0] = new1->BNum[0];
             this->childnode[0] = new1;
@@ -140,8 +136,9 @@ public:
                 new1->students[s] = Copy(this->students[k]);
 				new1->BNum[s] = this->BNum[k];
                 new1->in++;
+				new1->childnode[s]=this->childnode[k];
 				s++;
-				new1->childnode[s]=this->childnode[k+1];
+				
                 //this->students[k] =0;
             }
             this->in = IN_NODE_MAX/2+1;
@@ -185,10 +182,12 @@ public:
                     if(stu.score < tmp->students[0].score){
                         break;
                     }
-                    else if(stu.score > tmp->students[i].score && stu.score < tmp->students[i+1].score){
-                        break;
-                    }
-                    else if(stu.score == tmp->students[i].score){
+					else if(stu.score > tmp->students[tmp->in-1].score){
+						i = tmp->in;
+						break;
+					}
+                    else if(stu.score < tmp->students[i+1].score){
+						i++;
                         break;
                     }
                     else
@@ -201,7 +200,7 @@ public:
 			tmp->in++;
             tmp->Sort();
 			if(tmp->isFull()){
-				tmp->Split();
+				tmp->Split();                                                                                          
 			}
         }
 
@@ -248,14 +247,16 @@ public:
         int i = 0;
 		for( i =0;i<k;i++){
 			tmp = tmp->nextleaf;
+			if(tmp == NULL){
+				cout << k << "is too big." << endl;
+				break;
+			}
 		}
 		if(tmp!= NULL){
 			for(j =0; j< tmp->in ;j++){
 				cout << tmp->students[j].score << ", " << tmp->students[j].studentID << "," << tmp->BNum[j] <<endl;
 			}
 		}
-		else
-			cout << k << "is too big." << endl;
     }
 	Students Copy(Students& a){
 		Students b;
