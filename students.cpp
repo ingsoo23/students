@@ -77,8 +77,8 @@ int main() {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
 	}
-	// root->Print(fout);
-	// root->Print(k);
+	root->Print(fout);
+	root->Print(k);
 	fin.close();
 	testDB.Close();
 	fout.close();
