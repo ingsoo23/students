@@ -46,14 +46,11 @@ int main() {
 	string tmp;
 	Students* students;
 	_DB testDB;
-<<<<<<< HEAD
-	BPNode* root;
-	
-=======
+
 	BPNode* root = new BPNode();
 	cout << "Enter the leaf number" << endl;
 	cin >> k;
->>>>>>> 37190bca504adf4c64921a465c9c8cccfe309797
+
 	ifstream fin;
 	fin.open("sampleData.csv");
 
@@ -74,13 +71,7 @@ int main() {
 	}
 
 	//testDB.Print();
-<<<<<<< HEAD
 
-	cout << "Enter the leaf number" << endl;
-	cin >> k;
-
-=======
->>>>>>> 37190bca504adf4c64921a465c9c8cccfe309797
 	for (int i = 0; i < N; i++) {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
