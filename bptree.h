@@ -132,26 +132,26 @@ public:
 		}
         else{ //When this node is not a root.
 			s =0;
-            BPNode* new1 = new BPNode();
-			new1 = this->Copy();
+            BPNode* new1 = this->Copy();
 			int k;
 			//childtem = new BPNode();
 			//childtem = 
-            for(k = IN_NODE_MAX/2+2; k<IN_NODE_MAX; k++){
+            for(k = IN_NODE_MAX/2+1; k<IN_NODE_MAX+1; k++){
                 new1->students[s] = Copy(this->students[k]);
 				new1->BNum[s] = this->BNum[k];
                 new1->in++;
 				s++;
+				new1->childnode[s]=this->childnode[k+1];
                 //this->students[k] =0;
             }
-            this->in = IN_NODE_MAX/2 +1;
+            this->in = IN_NODE_MAX/2+1;
             if(new1->isLeaf()){
                 new1->nextleaf = this->nextleaf;
                 this->nextleaf = new1;
             }
 			parenttmp = this->parentnode;
-			parenttmp->students[parenttmp->in] = Copy(new1->students[new1->in]);
-			parenttmp->BNum[parenttmp->in] = new1->BNum[new1->in];
+			parenttmp->students[parenttmp->in] = Copy(this->students[this->in-1]);
+			parenttmp->BNum[parenttmp->in] = this->BNum[this->in-1];
 			parenttmp->in++;
 			parenttmp->childnode[parenttmp->in] = new1;
 			parenttmp->Sort();
