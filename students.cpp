@@ -47,8 +47,7 @@ int main() {
 	Students* students;
 	_DB testDB;
 	BPNode* root;
-	cout << "Enter the leaf number" << endl;
-	cin >> k;
+	
 	ifstream fin;
 	fin.open("sampleData.csv");
 
@@ -70,12 +69,15 @@ int main() {
 
 	//testDB.Print();
 
+	cout << "Enter the leaf number" << endl;
+	cin >> k;
+
 	for (int i = 0; i < N; i++) {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
 	}
-	root->Print(fout);
-	root->Print(k);
+	// root->Print(fout);
+	// root->Print(k);
 	fin.close();
 	testDB.Close();
 	fout.close();
