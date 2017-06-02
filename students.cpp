@@ -41,41 +41,44 @@ Students to_student(ifstream& fin) {
 int main() {
 
 	int N;
-	unsigned int tmpID;
-	int k;
+	//unsigned int tmpID;
+	int k =0 ;
 	string tmp;
-	Students student_tmp;
+	Students* students;
 	_DB testDB;
-	BPTree tree;
-
+	BPNode* root;
+	cout << "Enter the leaf number" << endl;
+	cin >> k;
 	ifstream fin;
 	fin.open("sampleData.csv");
-
-	getline(fin, tmp);
-	N = stoi(tmp);
-
-	unsigned int IDtmp[N];
-	testDB.Open();
-
-	for (int i = 0; i < N; i++) {
-		student_tmp = to_student(fin);
-		testDB.Insert(student_tmp);
-		IDtmp[i] = student_tmp.studentID;
-		// tree.Insert(student_tmp);
-	}
-
-	testDB.Print();
-
-	for (int i = 0; i < N; i++) {
-		cout << testDB.BlockNum(IDtmp[i]) << endl;
-	}
-
-	fin.close();
-	testDB.Close();
 
 	ofstream fout;
 	fout.open("Students_score.idx");
 
+	getline(fin, tmp);
+	N = stoi(tmp);
+
+	//unsigned int IDtmp[N];
+	testDB.Open();
+	students = new Students[N];
+	for (int i = 0; i < N; i++) {
+		students[i] = to_student(fin);
+		testDB.Insert(students[i]);
+		//IDtmp[i] = student_tmp.studentID;
+		// tree.Insert(student_tmp);
+	}
+
+	//testDB.Print();
+
+	for (int i = 0; i < N; i++) {
+		//cout << testDB.BlockNum(students[i].studentID) << endl;
+		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
+	}
+	root->Print(fout);
+	root->Print(k);
+	fin.close();
+	testDB.Close();
+	fout.close();
 //	N = stoi(tmp);
 //  Student* students;
 //  for (int i = 0; i<N; i++){
@@ -92,8 +95,6 @@ int main() {
 
     // cin >> k;
 	// tree.Print(k);
-  
-	fout.close();
-
+	delete [] students;
 	return 0;
 }
