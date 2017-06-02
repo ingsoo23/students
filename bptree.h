@@ -148,7 +148,8 @@ public:
         }
         else{
             while(!tmp->isLeaf()){
-                for(i = 0; i< tmp->in; i++){
+				cout << "lose" << endl;
+                for(i = 0; i < tmp->in; i++){
                     if(stu.score < tmp->students[0].score){
                         break;
                     }
@@ -162,45 +163,17 @@ public:
                     else
                         continue;
                 }
+				cout << i << endl;
                 tmp = tmp->childnode[i];
             }
             tmp->students[tmp->in] = Copy(stu);
 			tmp->BNum[tmp->in] = Bnum;
 			tmp->in++;
             tmp->Sort();
-			if(tmp-isFull()){
+			if(tmp->isFull()){
 				tmp->Split();
 			}
         }
-		
-        /*
-        else{
-            if(tmp->isLeaf()){
-                tmp->scores[tmp->in]=s.getscore();
-                tmp->Sort();
-            }
-            else{
-                while(!tmp->isLeaf()){
-                    for(i = 0; i< tmp->in; i++){
-                        if(s.getscore()< tmp->scores[0]){
-                            break;
-                        }
-                        else if(s.getscore() > tmp->scores[i] && s.getscore() < tmp->scores[i+1]){
-                            i++;
-                            break;
-                        }
-                        else if(s.getscore() == tmp->scores[i]){
-                            break;
-                        }
-                        else
-                            continue;
-                    }
-                    tmp = tmp->childnode[i];
-                }
-                tmp->score[tmp->in] = s.getscore();
-                tmp->Sort();
-
-            }}*/
 
     }
     void Print(fstream& of){
