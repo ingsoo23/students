@@ -68,7 +68,7 @@ public:
 		int s;
         BPNode* parenttmp;
         BPNode* childtem;
-        if(this->parentnode == NULL){			//When this node is a root.
+        if(this->parentnode == NULL && this->isLeaf()){			//When this node is a root.
 			
             BPNode* new1 = new BPNode();
             BPNode* new2 = new BPNode();
@@ -97,6 +97,39 @@ public:
             new1->parentnode = this;
             new2->parentnode = this;
         }
+		else if (this->parentnode == NULL){
+            BPNode* new1 = new BPNode();
+            BPNode* new2 = new BPNode();
+			s =0;
+            for(k = IN_NODE_MAX/2+1; k<in; k++){
+				
+                new2->students[s] = Copy(this->students[k]);
+				
+				new2->BNum[s] = this->BNum[k];
+                new2->in++;
+				s++;
+            }
+            for(j = 0; j< IN_NODE_MAX/2+1 ; j++){
+                new1->students[j] = Copy(this->students[j]);
+				new1->BNum[j] = this->BNum[j];
+                new1->in++;
+            }
+            for(j = 0 ; j<IN_NODE_MAX/2 +1 ; j++){
+				new1->childnode[j] = this->childnode[j];
+			}
+			for(j=IN_NODE_MAX/2 +1; j < IN_NODE_MAX+1 ;j++){
+				new2->childnode[j] = this->childnode[j];
+			}
+            this->students[0] = Copy(new1->students[new1->in-1]);
+			this->BNum[0] = new1->BNum[0];
+            this->childnode[0] = new1;
+            this->childnode[1] = new2;
+            new1->leaf = false;
+			new2->leaf = false;
+            this->in = 1;
+            new1->parentnode = this;
+            new2->parentnode = this;
+		}
         else{ //When this node is not a root.
 			s =0;
             BPNode* new1 = new BPNode();
@@ -148,22 +181,19 @@ public:
         }
         else{
             while(!tmp->isLeaf()){
-				cout << "lose" << endl;
                 for(i = 0; i < tmp->in; i++){
                     if(stu.score < tmp->students[0].score){
                         break;
                     }
-                    else if(stu.score > tmp->students[i].score && stu.score < tmp->students[i].score){
-                        i++;
+                    else if(stu.score > tmp->students[i].score && stu.score < tmp->students[i+1].score){
                         break;
-                    }//?
+                    }
                     else if(stu.score == tmp->students[i].score){
                         break;
                     }
                     else
                         continue;
                 }
-				cout << i << endl;
                 tmp = tmp->childnode[i];
             }
             tmp->students[tmp->in] = Copy(stu);
@@ -175,6 +205,23 @@ public:
 			}
         }
 
+    }
+    void Print(ofstream& of){
+		int s = 0;
+		int i =0;
+        BPNode* tmp = this;
+        while(!tmp->isLeaf()){
+            tmp = tmp->childnode[0];
+        }
+        while(tmp!= NULL){
+			of << "LEAF NODE No." << s+1 << endl;
+            for(i = 0; i<tmp->in; i++){
+				of << tmp->students[i].score << ", " << tmp->students[i].studentID << "," << tmp->BNum[i] <<endl;
+            }
+            tmp = tmp->nextleaf;
+			of << "-----------------------------------------------------------------------" << endl;
+			s++;
+        }
     }
     void Print(fstream& of){
   		int s = 0;

@@ -54,6 +54,9 @@ int main() {
 
 	fstream sco;
 
+	ofstream fout;
+	fout.open("Students_score.idx");
+
 	getline(fin, tmp);
 	N = stoi(tmp);
 
@@ -75,10 +78,13 @@ int main() {
 	for (int i = 0; i < N; i++) {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
+		
 	}
-	root->Print(sco);
+	//root->Print(sco);
+	root->Print(fout);
 	root->Print(k);
 	fin.close();
+	fout.close();
 	testDB.Close();
 //	N = stoi(tmp);
 //  Student* students;
