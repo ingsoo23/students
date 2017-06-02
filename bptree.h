@@ -217,13 +217,14 @@ public:
             }}*/
 
     }
-    void Print(ofstream& of){
+    void Print(fstream& of){
 		int s = 0;
 		int i =0;
         BPNode* tmp = this;
         while(!tmp->isLeaf()){
             tmp = tmp->childnode[0];
         }
+		/*
         while(tmp!= NULL){
 			of << "LEAF NODE No." << s+1 << endl;
             for(i = 0; i<tmp->in; i++){
@@ -233,7 +234,17 @@ public:
 			of << "-----------------------------------------------------------------------" << endl;
 			s++;
         }
+		*/
+		of.open("Students_score.idx", ios::in | ios::out | ios::binary);
+		if(!of)
+			of.open("Students_score.idx", ios::in | ios::out | ios::binary | ios::trunc);
+		while (tmp != NULL) {
+			of.write((char*)tmp, sizeof(BPNode));
+			tmp = tmp->nextleaf;
+		}
+		of.close();
     }
+
     void Print(int k){
 		int j =0;
         BPNode* tmp = this;
@@ -252,6 +263,7 @@ public:
 		else
 			cout << k << "is too big." << endl;
     }
+
 	Students Copy(Students& a){
 		Students b;
 		strcpy(b.name, a.name);
