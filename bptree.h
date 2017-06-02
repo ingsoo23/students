@@ -48,23 +48,11 @@ public:
 		BNum[i] = BNtemp;
         if(!this->isLeaf()){
             childtem = this->childnode[a];
-        //    tmp->leaf = false;
-        //    tmp->childnode[in] = BPNode();
-        //    tmp->childnode[in]->leaf = tmp->childnode[0]->leaf;
-         //   childtem = tmp->childnode[in];
             for(j = a; j > i; j--){
 				this->childnode[j] = this->childnode[j-1];
             }
-			
             this->childnode[i] = childtem;
         }
-      /*  else{
-            int tempBNum = this->BNum[in-1];
-            for(int j = in; j>i+1;j--)
-                BNum[j-1] = BNum[j-2];
-            BNum[i] = tempBNum;
-        }
-        */
     }
     BPNode* Copy(){
         BPNode* b = new BPNode();
@@ -80,7 +68,7 @@ public:
 		int s;
         BPNode* parenttmp;
         BPNode* childtem;
-        if(this->parentnode == NULL){ //When this node is a root.
+        if(this->parentnode == NULL){			//When this node is a root.
 			
             BPNode* new1 = new BPNode();
             BPNode* new2 = new BPNode();
@@ -154,15 +142,14 @@ public:
         tmp = this;
 
         if(tmp->in == 0){
-			tmp->students[0] = Copy(stu);
-			tmp->BNum[0] = Bnum;
+			tmp->students[tmp->in] = Copy(stu);
+			tmp->BNum[tmp->in] = Bnum;
+			tmp->in++;
         }
         else{
             while(!tmp->isLeaf()){
-				//cout << tmp->childnode[0]->students[0].score;
+				cout << "lose" << endl;
                 for(i = 0; i< tmp->in; i++){
-					
-					//cout << tmp->in;
                     if(stu.score < tmp->students[0].score){
                         break;
                     }
@@ -179,12 +166,12 @@ public:
                 tmp = tmp->childnode[i];
             }
             tmp->students[tmp->in] = Copy(stu);
-			//tmp->BNum[tmp->in] = Bnum;
+			tmp->BNum[tmp->in] = Bnum;
+			tmp->in++;
             tmp->Sort();
-        }
-        tmp->in++;
-        if (tmp->isOver()){
-            tmp->Split();
+			if(tmp->isOver()){
+				//tmp->Split();
+			}
         }
 		
         /*
@@ -218,23 +205,12 @@ public:
 
     }
     void Print(fstream& of){
-		int s = 0;
-		int i =0;
-        BPNode* tmp = this;
-        while(!tmp->isLeaf()){
-            tmp = tmp->childnode[0];
-        }
-		/*
-        while(tmp!= NULL){
-			of << "LEAF NODE No." << s+1 << endl;
-            for(i = 0; i<tmp->in; i++){
-				of << tmp->students[i].score << ", " << tmp->students[i].studentID << "," << tmp->BNum[i] <<endl;
-            }
-            tmp = tmp->nextleaf;
-			of << "-----------------------------------------------------------------------" << endl;
-			s++;
-        }
-		*/
+  		int s = 0;
+  		int i =0;
+          BPNode* tmp = this;
+          while(!tmp->isLeaf()){
+              tmp = tmp->childnode[0];
+          }
 		of.open("Students_score.idx", ios::in | ios::out | ios::binary);
 		if(!of)
 			of.open("Students_score.idx", ios::in | ios::out | ios::binary | ios::trunc);
@@ -243,8 +219,7 @@ public:
 			tmp = tmp->nextleaf;
 		}
 		of.close();
-    }
-
+	}
     void Print(int k){
 		int j =0;
         BPNode* tmp = this;
@@ -263,7 +238,6 @@ public:
 		else
 			cout << k << "is too big." << endl;
     }
-
 	Students Copy(Students& a){
 		Students b;
 		strcpy(b.name, a.name);
