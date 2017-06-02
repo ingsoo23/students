@@ -78,6 +78,7 @@ void _DB::Print()
 	H->Print_Hash_Table();
 }
 
+/*
 void _DB::ID_Search(unsigned int ID)
 {
 	long DB_File_Offset = H->Get_Hash_Offset(to_string(ID));               // 해당 ID Record가 존재하는 Block Offset을 Return.
@@ -96,6 +97,7 @@ void _DB::ID_Search(unsigned int ID)
 
 	cout << "No Record Look Up." << endl;
 }
+*/
 
 int _DB::BlockNum(unsigned int ID)
 {

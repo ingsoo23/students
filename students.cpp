@@ -48,8 +48,6 @@ int main() {
 	_DB testDB;
 
 	BPNode* root = new BPNode();
-	cout << "Enter the leaf number" << endl;
-	cin >> k;
 
 	ifstream fin;
 	fin.open("sampleData.csv");
@@ -70,7 +68,10 @@ int main() {
 		// tree.Insert(student_tmp);
 	}
 
-	//testDB.Print();
+	testDB.Print();
+
+	cout << "Enter the leaf number" << endl;
+	cin >> k;
 
 	for (int i = 0; i < N; i++) {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;

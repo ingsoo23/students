@@ -18,7 +18,7 @@ public:
 	void Close();
 	bool Insert(Students student);
 	void Print();
-	void ID_Search(unsigned int ID);
+	// void ID_Search(unsigned int ID);
 	int BlockNum(unsigned int ID);
 };
 
