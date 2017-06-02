@@ -24,8 +24,8 @@ public:
         leaf = true;
         in = 0;
     }
-    bool isOver(){
-        return (IN_NODE_MAX < in);
+    bool isFull(){
+        return (IN_NODE_MAX == in);
     }
     void Sort(){
         Students temp;
@@ -122,7 +122,7 @@ public:
 			parenttmp->in++;
 			parenttmp->childnode[parenttmp->in] = new1;
 			parenttmp->Sort();
-			if(parenttmp->isOver())
+			if(parenttmp->isFull())
 				parenttmp->Split();
             //insert parent¿¡ scores[in/2]
             //childnode Á¤¸®
@@ -148,7 +148,6 @@ public:
         }
         else{
             while(!tmp->isLeaf()){
-				cout << "lose" << endl;
                 for(i = 0; i< tmp->in; i++){
                     if(stu.score < tmp->students[0].score){
                         break;
@@ -169,8 +168,8 @@ public:
 			tmp->BNum[tmp->in] = Bnum;
 			tmp->in++;
             tmp->Sort();
-			if(tmp->isOver()){
-				//tmp->Split();
+			if(tmp-isFull()){
+				tmp->Split();
 			}
         }
 		
