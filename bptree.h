@@ -48,10 +48,10 @@ public:
 		BNum[i] = BNtemp;
         if(!this->isLeaf()){
             childtem = this->childnode[a];
-            for(j = a; j > i; j--){
+            for(j = a; j > i+1; j--){
 				this->childnode[j] = this->childnode[j-1];
             }
-            this->childnode[i] = childtem;
+            this->childnode[i+1] = childtem;
         }
     }
     BPNode* Copy(){
@@ -65,7 +65,7 @@ public:
 		//int* mid;
 		int k =0;
 		int j =0;
-		int s;
+		int s =0;
         BPNode* parenttmp;
         BPNode* childtem;
         if(this->parentnode == NULL && this->isLeaf()){			//When this node is a root.
@@ -105,7 +105,7 @@ public:
 				
                 new2->students[s] = Copy(this->students[k]);
 				
-				new2->childnode[s] = this->childnode[k];
+				new2->childnode[s+1] = this->childnode[k];
 				new2->BNum[s] = this->BNum[k];
                 new2->in++;
 				s++;
@@ -117,7 +117,7 @@ public:
                 new1->in++;
             }
             this->students[0] = Copy(new1->students[new1->in-1]);
-			this->BNum[0] = new1->BNum[0];
+			this->BNum[0] = new1->BNum[new1->in-1];
             this->childnode[0] = new1;
             this->childnode[1] = new2;
             new1->leaf = false;
@@ -132,11 +132,11 @@ public:
 			int k;
 			//childtem = new BPNode();
 			//childtem = 
-            for(k = IN_NODE_MAX/2+1; k<IN_NODE_MAX+1; k++){
+            for(k = this->in/2+1; k<this->in+1; k++){
                 new1->students[s] = Copy(this->students[k]);
 				new1->BNum[s] = this->BNum[k];
                 new1->in++;
-				new1->childnode[s]=this->childnode[k];
+				new1->childnode[s+1]=this->childnode[k];
 				s++;
 				
                 //this->students[k] =0;
@@ -182,14 +182,17 @@ public:
                     if(stu.score < tmp->students[0].score){
                         break;
                     }
-					else if(stu.score > tmp->students[tmp->in-1].score){
-						i = tmp->in;
+					else if (stu.score > tmp->students[tmp->in-1].score){
+						i=tmp->in-1;
+					}
+					else if(stu.score > tmp->students[i].score && stu.score < tmp->students[i+1].score){
+						i++;
 						break;
 					}
-                    else if(stu.score < tmp->students[i+1].score){
+					else if(stu.score == tmp->students[i].score && stu.score < tmp->students[i+1].score){
 						i++;
-                        break;
-                    }
+						break;
+					}
                     else
                         continue;
                 }
