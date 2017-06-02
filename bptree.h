@@ -165,7 +165,7 @@ public:
         return (in == 0);}
     bool isLeaf(){
         return leaf;}
-    void Insert(Students stu, int Bnum){
+    void Insert(Students stu, int Bnum){ //insert 
 		int t= 0;
         int i = 0;
         BPNode* tmp = new BPNode();
@@ -207,23 +207,6 @@ public:
 			}
         }
 
-    }
-    void Print(ofstream& of){
-		int s = 0;
-		int i =0;
-        BPNode* tmp = this;
-        while(!tmp->isLeaf()){
-            tmp = tmp->childnode[0];
-        }
-        while(tmp!= NULL){
-			of << "LEAF NODE No." << s+1 << endl;
-            for(i = 0; i<tmp->in; i++){
-				of << tmp->students[i].score << ", " << tmp->students[i].studentID << "," << tmp->BNum[i] <<endl;
-            }
-            tmp = tmp->nextleaf;
-			of << "-----------------------------------------------------------------------" << endl;
-			s++;
-        }
     }
     void Print(fstream& of){
   		int s = 0;
