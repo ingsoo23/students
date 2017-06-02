@@ -46,7 +46,7 @@ int main() {
 	string tmp;
 	Students* students;
 	_DB testDB;
-	BPNode* root;
+	BPNode* root = new BPNode();
 	cout << "Enter the leaf number" << endl;
 	cin >> k;
 	ifstream fin;
@@ -69,7 +69,6 @@ int main() {
 	}
 
 	//testDB.Print();
-
 	for (int i = 0; i < N; i++) {
 		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
