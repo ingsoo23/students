@@ -41,60 +41,41 @@ Students to_student(ifstream& fin) {
 int main() {
 
 	int N;
-	//unsigned int tmpID;
 	int k =0 ;
 	string tmp;
 	Students* students;
 	_DB testDB;
-	BPNode* root;
-	cout << "Enter the leaf number" << endl;
-	cin >> k;
+
+	BPNode* root = new BPNode();
+
 	ifstream fin;
 	fin.open("sampleData.csv");
 
-	ofstream fout;
-	fout.open("Students_score.idx");
+	fstream sco;
 
 	getline(fin, tmp);
 	N = stoi(tmp);
 
-	//unsigned int IDtmp[N];
 	testDB.Open();
 	students = new Students[N];
 	for (int i = 0; i < N; i++) {
 		students[i] = to_student(fin);
 		testDB.Insert(students[i]);
-		//IDtmp[i] = student_tmp.studentID;
-		// tree.Insert(student_tmp);
 	}
 
-	//testDB.Print();
+	testDB.Print();
+
+	cout << "Enter the leaf number" << endl;
+	cin >> k;
 
 	for (int i = 0; i < N; i++) {
-		//cout << testDB.BlockNum(students[i].studentID) << endl;
 		root->Insert(students[i],testDB.BlockNum(students[i].studentID));
+		
 	}
-	root->Print(fout);
-	root->Print(k);
+	root->Print(sco);
+	root->Print(k+1);
 	fin.close();
 	testDB.Close();
-	fout.close();
-//	N = stoi(tmp);
-//  Student* students;
-//  for (int i = 0; i<N; i++){
-//  insert_DB(); // treanfer the excel data 'fin' into Students class
-//  Hashfunction(students[i]); // choose BLOCK where this student data stored
-//  }
-//  fout1 <<Hash result
-//  BPNode* root;
-//  for(int i =0;i<N; i++){
-//  root.insert(student[i]);
-//  }
-//  fout2 << BPTree;
-//  cout << K-th leaf node;
-
-    // cin >> k;
-	// tree.Print(k);
 	delete [] students;
 	return 0;
 }
